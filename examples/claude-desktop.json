@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "career-ops": {
+      "command": "/opt/homebrew/bin/uv",
+      "args": [
+        "--directory",
+        "~/Projects/career-ops-mcp",
+        "run",
+        "career-ops-mcp"
+      ],
+      "env": {
+        "CAREER_OPS_ROOT": "~/Projects/career-ops"
+      }
+    }
+  }
+}

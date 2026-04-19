@@ -1,0 +1,22 @@
+title_filter:
+  positive: [engineer, product manager, solutions architect]
+  negative: [intern, junior]
+
+search_queries:
+  - name: fde-ashby
+    query: site:jobs.ashbyhq.com "forward deployed"
+    enabled: true
+
+tracked_companies:
+  - name: Acme Corp
+    careers_url: https://careers.acme.example.com
+    api: https://api.acme.example.com/jobs
+    enabled: true
+    notes: Greenhouse-based
+  - name: Beta Inc
+    careers_url: https://beta.example.com/jobs
+    enabled: true
+  - name: Gamma AI
+    careers_url: https://gamma.example.com/careers
+    enabled: false
+    notes: Disabled pending review
