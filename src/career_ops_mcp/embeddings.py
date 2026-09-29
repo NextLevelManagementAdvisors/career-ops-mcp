@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 from fastembed import TextEmbedding
 
-from career_ops_mcp.config import EMBED_MODEL
+from career_ops_mcp.config import CACHE_DIR, EMBED_MODEL
 
 _model: TextEmbedding | None = None
 
@@ -11,7 +11,9 @@ _model: TextEmbedding | None = None
 def get_model() -> TextEmbedding:
     global _model
     if _model is None:
-        _model = TextEmbedding(EMBED_MODEL)
+        # Pin the model cache next to the index; fastembed's default is the
+        # OS temp dir, which macOS purges, leaving a half-deleted snapshot.
+        _model = TextEmbedding(EMBED_MODEL, cache_dir=str(CACHE_DIR / "models"))
     return _model
 
 
