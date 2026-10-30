@@ -44,7 +44,7 @@ def list_applications(
 
 def get_application(company: str, role: str | None = None) -> dict | list[dict]:
     if not APPLICATIONS_FILE.exists():
-        return {"error": "applications.md not found"}
+        return {"error": f"applications.md not found at {APPLICATIONS_FILE}"}
     apps = app_parser.parse(APPLICATIONS_FILE)
     matches = [a for a in apps if company.lower() in a.company.lower()]
     if role:
@@ -110,7 +110,16 @@ def match_cv_to_jd(
         text = rep_parser.read_report(REPORTS_DIR, report_id)
     if not text and jd_url:
         try:
-            import urllib.request
+            import urllib.request, urllib.parse, socket, ipaddress
+            parsed = urllib.parse.urlparse(jd_url)
+            if parsed.scheme not in ("http", "https"):
+                return {"error": "refused: jd_url must be http(s)"}
+            host = parsed.hostname or ""
+            for info in socket.getaddrinfo(host, None):
+                ip = ipaddress.ip_address(info[4][0])
+                if (ip.is_private or ip.is_loopback or ip.is_link_local
+                        or ip.is_reserved or ip.is_multicast or ip.is_unspecified):
+                    return {"error": "refused: jd_url resolves to a non-public address"}
             with urllib.request.urlopen(jd_url, timeout=10) as resp:
                 raw = resp.read().decode("utf-8", errors="ignore")
             import re
